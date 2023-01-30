@@ -1,62 +1,53 @@
-#Créé par Fabrice Bouchard
-#Janvier 2023
-#POO3
+# Créé par Fabrice Bouchard
+# Janvier 2023
+# POO3
 
-#Importation
+# Importation
 from random import *
 
-#Définir les variables des 4 dées
+# Définir les variables des 4 dées
 
 deUn = randint(1, 6)
 deDeux = randint(1, 6)
 deTrois = randint(1, 6)
-deQuatre = randint(1,6)
+deQuatre = randint(1, 6)
 
-#Mise en place de la classe NPC
+#Fonction pour trouver les statistiques d'agilité, de force, de constitution, d'intelligence, de sagesse et de charisme
+
+def stats_aleatoire():
+    quatre_des = [deUn, deDeux, deTrois, deQuatre]
+    quatre_des.sort()
+    quatre_des.pop(0)
+    addition = sum(quatre_des)
+    return addition
+
+
+# Mise en place de la classe NPC
 
 class NPC:
 
-#Mise en place des caractéristque du NPC
-    
+    # Mise en place des caractéristque du NPC
+
     def __init__(self, nom, race, espece, profession):
+        # Paramètre définis par le hasard
+
+        self.force = stats_aleatoire()
         
-        #Paramètre définis par le hasard
-        
-        self.force = [deUn, deDeux, deTrois, deQuatre]
-        self.force.sort()
-        self.force.pop(0)
-        self.force = sum(self.force)
+        self.agilite = stats_aleatoire()
+       
+        self.constitution = stats_aleatoire()
 
-        self.agilite = [deUn, deDeux, deTrois, deQuatre]
-        self.agilite.sort()
-        self.agilite.pop(0)
-        self.agilite = sum(self.agilite)
+        self.intelligence = stats_aleatoire()
 
-        self.constitution = [deUn, deDeux, deTrois, deQuatre]
-        self.constitution.sort()
-        self.constitution.pop(0)
-        self.constitution = sum(self.constitution)
+        self.sagesse = stats_aleatoire()
 
-        self.intelligence = [deUn, deDeux, deTrois, deQuatre]
-        self.intelligence.sort()
-        self.intelligence.pop(0)
-        self.intelligence = sum(self.intelligence)
-
-        self.sagesse = [deUn, deDeux, deTrois, deQuatre]
-        self.sagesse.sort()
-        self.sagesse.pop(0)
-        self.sagesse = sum(self.sagesse)
-
-        self.charisme = [deUn, deDeux, deTrois, deQuatre]
-        self.charisme.sort()
-        self.charisme.pop(0)
-        self.charisme = sum(self.charisme)
+        self.charisme = stats_aleatoire()
 
         self.classe_armure = randint(1, 12)
 
         self.point_de_vie = randint(1, 20)
 
-        #Paramètre définie par le joueur
+        # Paramètre définie par le joueur
 
         self.nom = ''
 
@@ -66,10 +57,10 @@ class NPC:
 
         self.profession = ''
 
-#Mise en place de la méthode pour afficher les caratéristiques
-    
+    # Mise en place de la méthode pour afficher les caratéristiques
+
     def afficher_caracteristiques(self):
-        print("Force:",self.force)
+        print("Force:", self.force)
         print("Agilité:", self.agilite)
         print("Constitution:", self.constitution)
         print("Intelligence:", self.intelligence)
@@ -82,48 +73,50 @@ class NPC:
         print("Point de vie:", self.point_de_vie)
         print("Proffession:", self.profession)
 
-#Mise en place de la classe kobold(le monstre), qui hérite de NPC
+
+# Mise en place de la classe kobold(le monstre), qui hérite de NPC
 class kobold(NPC):
     def __init__(self, par1, par2, par3, par4):
         super().__init__(par1, par2, par3, par4)
 
-#Mise en place de la méthode attaquer
+    # Mise en place de la méthode attaquer
     def attaquer(self, cible):
         self.npc = cible
         return
 
-#Mise en place de la méthode pour subir des dommages (pour le monstre)
+    # Mise en place de la méthode pour subir des dommages (pour le monstre)
     def subir_dommage(self, quantite_dommage):
         return
 
 
-#Définiton de la classe Heros (qui hérite de NPC)
+# Définiton de la classe Heros (qui hérite de NPC)
 class Heros(NPC):
     def __init__(self, par1, par2, par3, par4):
         super().__init__(par1, par2, par3, par4)
 
-#Mise en place de la méthode attaquer
+    # Mise en place de la méthode attaquer
     def attaquer(self, cible):
-        #Lancé de dé
+        # Lancé de dé
         lance_de_hero = randint(1, 20)
-        #Si le dée tombe sur 1 (attaque ratée)
+        # Si le dée tombe sur 1 (attaque ratée)
         if lance_de_hero == 1:
             print("L'attaque est ratée...")
-        #Si le dée tombe sur 20 (coup critique)
+        # Si le dée tombe sur 20 (coup critique)
         if lance_de_hero == 20:
             de_dommage = randint(1, 8)
             cible.subir_dommage = randint(1, 8)
             print("Coup critique! Le monstre subit:", de_dommage, "dommage.")
-        #Si le dée tombe entre 2 et 19 inclusivement (attaque dépendante de l'armure de l'adversaire)
+        # Si le dée tombe entre 2 et 19 inclusivement (attaque dépendante de l'armure de l'adversaire)
         if lance_de_hero > 1 and lance_de_hero < 20:
-            #Si l'armure est plus faible que l'attaque
+            # Si l'armure est plus faible que l'attaque
             if self.classe_armure <= lance_de_hero:
                 print("L'adversaire a subit ", lance_de_hero, "de dommage.")
-            #Si l'armure est plus forte que l'attaque(attaque ratée)
+            # Si l'armure est plus forte que l'attaque(attaque ratée)
             if lance_de_hero < self.classe_armure:
                 print("L'armure de l'énemie est trop résistance, échec de l'attaque...")
 
         return
-    #Définiton de la méthode pour subir des dommages (pour le héros)
+
+    # Définiton de la méthode pour subir des dommages (pour le héros)
     def subir_dommage(self, quantite_dommage):
         return
